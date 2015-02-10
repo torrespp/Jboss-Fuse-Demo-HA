@@ -1,0 +1,74 @@
+<beans
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:amq="http://activemq.apache.org/schema/core"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+    http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd">
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="properties">
+            <bean class="org.fusesource.mq.fabric.ConfigurationProperties"/>
+        </property>
+    </bean>
+    <broker xmlns="http://activemq.apache.org/schema/core"
+        brokerName="${broker-name}"
+        brokerId="${broker-name}"
+        dataDirectory="${data}"
+        start="false"
+        persistent="true"
+        networkConnectorStartAsync="true"
+        useJmx="true">
+        <destinationPolicy>
+            <policyMap>
+                <policyEntries>
+                    <policyEntry topic=">" producerFlowControl="false" optimizedDispatch="true"
+                        memoryLimit="512mb">
+                        <pendingMessageLimitStrategy>
+                            <constantPendingMessageLimitStrategy limit="1000000"/>
+                        </pendingMessageLimitStrategy>
+                        <pendingSubscriberPolicy>
+                            <fileCursor/>
+                        </pendingSubscriberPolicy>
+                    </policyEntry>
+                    <policyEntry queue=">" producerFlowControl="false" optimizedDispatch="true"
+                        memoryLimit="512mb">
+                    </policyEntry>
+                </policyEntries>
+            </policyMap>
+        </destinationPolicy>
+        <managementContext>
+            <managementContext createConnector="false"/>
+        </managementContext>
+        <persistenceAdapter>
+            <kahaDB directory="${dataDir}/${brokerGroup}/kahadb" journalMaxFileLength="32mb"
+                enableJournalDiskSyncs="false" concurrentStoreAndDispatchTopics="true" indexCacheSize="100000"
+                concurrentStoreAndDispatchQueues="true">
+                <locker>
+                    <shared-file-locker lockAcquireSleepInterval="200"/>
+                </locker>
+            </kahaDB>
+        </persistenceAdapter>
+        <plugins>
+            <jaasAuthenticationPlugin configuration="karaf" />
+        </plugins>
+        <systemUsage>
+            <systemUsage sendFailIfNoSpaceAfterTimeout="5000">
+                <memoryUsage>
+                    <memoryUsage limit="1024 mb"/>
+                </memoryUsage>
+                <storeUsage>
+                    <storeUsage limit="20480 mb"/>
+                </storeUsage>
+                <tempUsage>
+                    <tempUsage limit="10240 mb"/>
+                </tempUsage>
+            </systemUsage>
+        </systemUsage>
+        <networkConnectors>
+        </networkConnectors>
+        <transportConnectors>
+            <transportConnector name="openwire" uri="tcp://${ipaddress}:${port}?
+            socketBufferSize=262144&amp;ioBufferSize=327680&amp;jms.useCompression=true;"/>
+        </transportConnectors>
+    </broker>
+</beans>

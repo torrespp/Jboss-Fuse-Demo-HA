@@ -1,0 +1,306 @@
+package com.redhat.poc.jdbc;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.SQLWarning;
+import java.sql.Statement;
+
+import javax.jms.JMSException;
+import javax.jms.Queue;
+import javax.jms.QueueConnection;
+import javax.jms.QueueSender;
+import javax.jms.QueueSession;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import javax.naming.NamingException;
+
+import com.redhat.poc.jdbc.utils.AMQConnectionFactory;
+
+public class AmqJdbcStatement implements Statement {
+
+	private static AMQConnectionFactory amqFactory = AMQConnectionFactory.getInstance();
+	
+	private QueueSession queueSession;
+	private QueueConnection queueConnection;
+	private Queue queue;
+	private QueueSender queueSender;
+	
+	public AmqJdbcStatement() throws JMSException, NamingException{
+		queueConnection = amqFactory.getQueueConnectionInstance();
+		queueSession = queueConnection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+		queue = amqFactory.getWriterQueue();
+		queueSender = queueSession.createSender(queue);
+	}
+	
+	public <T> T unwrap(Class<T> iface) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean isWrapperFor(Class<?> iface) throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public ResultSet executeQuery(String sql) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int executeUpdate(String sql) throws SQLException {
+		try {
+			TextMessage textMessage = queueSession.createTextMessage(sql);
+			queueSender.send(textMessage);
+			return 1;
+		} catch (JMSException e) {
+			throw new RuntimeException("Error in JMS operations", e);
+		} 
+	}
+
+	public void close() throws SQLException {
+		try {
+			queueSender.close();
+			queueSession.close();
+		} catch (JMSException e) {
+			throw new SQLException("Cannot close sender and session");
+		}
+		
+	}
+
+	public int getMaxFieldSize() throws SQLException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public void setMaxFieldSize(int max) throws SQLException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public int getMaxRows() throws SQLException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public void setMaxRows(int max) throws SQLException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void setEscapeProcessing(boolean enable) throws SQLException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public int getQueryTimeout() throws SQLException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public void setQueryTimeout(int seconds) throws SQLException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void cancel() throws SQLException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public SQLWarning getWarnings() throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void clearWarnings() throws SQLException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void setCursorName(String name) throws SQLException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public boolean execute(String sql) throws SQLException {
+		try {
+			TextMessage textMessage = queueSession.createTextMessage(sql);
+			queueSender.send(textMessage);
+			return true;
+		} catch (JMSException e) {
+			throw new SQLException("Error in JMS operations", e);
+		} 
+	}
+
+	public ResultSet getResultSet() throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int getUpdateCount() throws SQLException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public boolean getMoreResults() throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void setFetchDirection(int direction) throws SQLException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public int getFetchDirection() throws SQLException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public void setFetchSize(int rows) throws SQLException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public int getFetchSize() throws SQLException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getResultSetConcurrency() throws SQLException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getResultSetType() throws SQLException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public void addBatch(String sql) throws SQLException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void clearBatch() throws SQLException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public int[] executeBatch() throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Connection getConnection() throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean getMoreResults(int current) throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public ResultSet getGeneratedKeys() throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int executeUpdate(String sql, int autoGeneratedKeys)
+			throws SQLException {
+		try {
+			TextMessage textMessage = queueSession.createTextMessage(sql);
+			queueSender.send(textMessage);
+			return 1;
+		} catch (JMSException e) {
+			throw new RuntimeException("Error in JMS operations", e);
+		} 
+	}
+
+	public int executeUpdate(String sql, int[] columnIndexes)
+			throws SQLException {
+		try {
+			TextMessage textMessage = queueSession.createTextMessage(sql);
+			queueSender.send(textMessage);
+			return 1;
+		} catch (JMSException e) {
+			throw new RuntimeException("Error in JMS operations", e);
+		} 
+	}
+
+	public int executeUpdate(String sql, String[] columnNames)
+			throws SQLException {
+		try {
+			TextMessage textMessage = queueSession.createTextMessage(sql);
+			queueSender.send(textMessage);
+			return 1;
+		} catch (JMSException e) {
+			throw new RuntimeException("Error in JMS operations", e);
+		} 
+	}
+
+	public boolean execute(String sql, int autoGeneratedKeys)
+			throws SQLException {
+		try {
+			TextMessage textMessage = queueSession.createTextMessage(sql);
+			queueSender.send(textMessage);
+			return true;
+		} catch (JMSException e) {
+			throw new RuntimeException("Error in JMS operations", e);
+		} 
+	}
+
+	public boolean execute(String sql, int[] columnIndexes) throws SQLException {
+		try {
+			TextMessage textMessage = queueSession.createTextMessage(sql);
+			queueSender.send(textMessage);
+			return true;
+		} catch (JMSException e) {
+			throw new RuntimeException("Error in JMS operations", e);
+		} 
+	}
+
+	public boolean execute(String sql, String[] columnNames)
+			throws SQLException {
+		try {
+			TextMessage textMessage = queueSession.createTextMessage(sql);
+			queueSender.send(textMessage);
+			return true;
+		} catch (JMSException e) {
+			throw new RuntimeException("Error in JMS operations", e);
+		} 
+	}
+
+	public int getResultSetHoldability() throws SQLException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public boolean isClosed() throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void setPoolable(boolean poolable) throws SQLException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public boolean isPoolable() throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void closeOnCompletion() throws SQLException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public boolean isCloseOnCompletion() throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

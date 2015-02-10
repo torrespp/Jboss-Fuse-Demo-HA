@@ -1,0 +1,15 @@
+target/
+bin/
+.settings/
+.metadata/
+RemoteSystemTempFiles/
+*.DS_Store
+*.classpath
+*.project
+*.settings/org.eclipse.core.resources.prefs
+*.class
+*.zip
+*.jar
+*.war
+*.ear
+
