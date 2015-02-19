@@ -87,9 +87,9 @@ Before running JBoss Fuse for the first time we need to configure user/password 
 ## Setup mq-brokers profile
 
 6. Create JMSBrokers profiles on karaf console
-	- `fabric:profile-create mq-brokers`
-	- `fabric:profile-edit --resource broker.xml mq-brokers`
-	- Paste the following xml text on **broker.xml** content: 
+ * `fabric:profile-create mq-brokers`
+ * `fabric:profile-edit --resource broker.xml mq-brokers`
+ * Paste the following xml text on **broker.xml** content: 
 ```XML	
 <beans
 xmlns="http://www.springframework.org/schema/beans"
@@ -166,7 +166,7 @@ socketBufferSize=262144&amp;ioBufferSize=327680&amp;jms.useCompression=true;"/>
 </broker>
 </beans>
 ```
-	- Save (ctrl+s) and exit editor (ctrl + x)<br/>
+ * Save (ctrl+s) and exit editor (ctrl + x)
     
 	On Fabric configurations profiles are what define what projects, features, configurations and parameters will be available for brokers.<br/><br/>
     In this case, what happened is that we create a new profile called **mq-brokers** that will have all JMS definition on a file called **broker.xml**.<br/>
@@ -209,7 +209,7 @@ dataDir=/opt/tmp
 
 ## Setup JMS Group2 profile and brokers
 
-12. Create brokers group two profile
+1. Create brokers group two profile
 	- `fabric:profile-create mq-group2`
 	- `fabric:profile-edit --pid org.fusesource.mq.fabric.server-broker mq-group2`
 	- On editor add the next lines changing its values as needed:
