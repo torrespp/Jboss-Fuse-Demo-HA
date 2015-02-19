@@ -176,16 +176,16 @@ socketBufferSize=262144&amp;ioBufferSize=327680&amp;jms.useCompression=true;"/>
 ## Setup JMS Group1 profile and brokers
 
 7. Since we want to configure two clusters we need a child profile for each group. Lets create brokers group one profile
- * `fabric:profile-create mq-group1`
- * `fabric:profile-edit --pid org.fusesource.mq.fabric.server-broker mq-group1`
- * On editor add the next lines changing its values as needed:
+	* `fabric:profile-create mq-group1`
+	* `fabric:profile-edit --pid org.fusesource.mq.fabric.server-broker mq-group1`
+	* On editor add the next lines changing its values as needed:
 ```Text
 brokerGroup=JMSGroup1
 port=61617
 ipaddress=127.0.0.1
 dataDir=/opt/tmp
 ```
- * Save (ctrl+s) and exit editor (ctrl + x)
+	* Save (ctrl+s) and exit editor (ctrl + x)
     
     In this case we want to create a Master/Slave group named **brokerGroup** on port **61617** on ipaddress **127.0.0.1**. Notice hoy this variables are the ones defined on **mq-brokers/broker.xml** definition. Also notices that **dataDir** should exists, so if it isn't available, create it or change that value to an existing directory. 
 
@@ -210,16 +210,16 @@ dataDir=/opt/tmp
 ## Setup JMS Group2 profile and brokers
 
 1. Create brokers group two profile
- * `fabric:profile-create mq-group2`
- * `fabric:profile-edit --pid org.fusesource.mq.fabric.server-broker mq-group2`
- * On editor add the next lines changing its values as needed:
+	* `fabric:profile-create mq-group2`
+	* `fabric:profile-edit --pid org.fusesource.mq.fabric.server-broker mq-group2`
+	* On editor add the next lines changing its values as needed:
 ```Text
 brokerGroup=JMSGroup2
 port=61618
 ipaddress=127.0.0.1
 dataDir=/opt/tmp
 ```
- * Save (ctrl+s) and exit editor (ctrl + x)
+	* Save (ctrl+s) and exit editor (ctrl + x)
     
     Same step as mq-group1 profile but port changed to **61618**
 
