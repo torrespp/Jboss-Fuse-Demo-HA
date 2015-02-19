@@ -167,6 +167,7 @@ socketBufferSize=262144&amp;ioBufferSize=327680&amp;jms.useCompression=true;"/>
 </beans>
 ```
 	- Save (ctrl+s) and exit editor (ctrl + x)<br/>
+    
 	On Fabric configurations profiles are what define what projects, features, configurations and parameters will be available for brokers.<br/><br/>
     In this case, what happened is that we create a new profile called **mq-brokers** that will have all JMS definition on a file called **broker.xml**.<br/>
     Notice how the xml we use define some variables (Example ${ipaddress}). This variables will help us next because Fuse Fabric profiles are hierarchical. This means that any child profile of **mq-brokers** can override just the variables definitions to configure different enviorments.<br/><br/>
@@ -218,14 +219,15 @@ port=61618
 ipaddress=127.0.0.1
 dataDir=/opt/tmp
 ```
-	- Save (ctrl+s) and exit editor (ctrl + x)<br/>
+	- Save (ctrl+s) and exit editor (ctrl + x)
+    
     Same step as mq-group1 profile but port changed to **61618**
 
 13. Change profiles parents
 	- `profile-change-parents mq-group2 mq-brokers`
 
 14. Create Group2 containers
-	- `fabric:container-create-child --jvm-opts "-Xmx2048m -Xms2048m" --profile mq-group2 root JMSGroup2 2`<br/>
+	- `fabric:container-create-child --jvm-opts "-Xmx2048m -Xms2048m" --profile mq-group2 root JMSGroup2 2`
 
 15. Wait until they are created and started
 	- `watch container-list`<br/>
