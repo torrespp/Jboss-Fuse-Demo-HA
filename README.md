@@ -41,7 +41,9 @@ This demo will include information about several topics wich include:
 1. Unzip JBoss Fuse on any directory that you wish to use as $FUSE_HOME. In this example i will use directory `/opt/redhat/`. Copy JBoss Fuse installation zip file on the selected directory and be sure your user have read, write and execute privileges.
 
 	- `cd /opt/redhat`
-	- `unzip jboss-fuse-full-6.1.0.redhat-379.zip`
+	- `unzip jboss-fuse-full-6.1.0.redhat-379.zip`<br/>
+    ![Unzip Command](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture1.png)
+    
 	- `export FUSE_HOME=/opt/redhat/jboss-fuse-full-6.1.0.redhat-379`
 
 	Thats it!!!, JBoss Fuse is already install!!!
@@ -63,7 +65,7 @@ Before running JBoss Fuse for the first time we need to configure user/password 
 2. Access karaf console:
 	-  `./bin/client -u admin -p admin` 
     <br/>If you get a message **"Failed to get the session"** wait a few seconds and try again. This message means that JBoss Fuse is starting.<br/>
-	![Karaf Console](https://localhost/Capture1.png)
+	![Karaf Console](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture2.png)
 
 3. Create a fabric so we can manage all the brokers from a single console:
 	- fabric:create --clean --wait-for-provisioning  --bind-address localhost --resolver manualip --global-resolver manualip --manual-ip localhost --zookeeper-password admin
