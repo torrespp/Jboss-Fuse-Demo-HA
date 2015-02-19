@@ -271,21 +271,24 @@ There are two projects:
 	- Save (ctrl+s) and exit editor (ctrl + x)
 
 4. Create broker for executing route. On karaf console run:
-	- fabric:container-create-child --profile camel-broker1 root JDBCPocBroker1
-	- fabric:container-create-child --profile camel-broker2 root JDBCPocBroker2
-	- watch container-list
+	- `fabric:container-create-child --profile camel-broker1 root JDBCPocBroker1`
+	- `fabric:container-create-child --profile camel-broker2 root JDBCPocBroker2`
+	- `watch container-list
+	![Camel broker 1 and 2 ](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture17.png)
 
-5 Create two more containers for parallel processing on each queue
-	- fabric:container-create-child --profile camel-broker1 root JDBCPocBroker3
- 	- fabric:container-create-child --profile camel-broker2 root JDBCPocBroker4
-	- watch container-list
-
-5 Compile and run spring-db-populator client
-	- cd <projects_dir>/spring-db-populator/
-	- Edit file ./src/main/resources/jdbc-spring-context.xml and change beans activemq and activemq2 to point at both brokers groups ports 
-	- mvn clean package
-	- java -jar ./target/spring-db-populator-0.0.1-SNAPSHOT.jar 1 5000 1000 
-Note: On the client the parameters are 1 = start index, 5000 = how many inserts to execute, 1000 total parallel threads
+5. Create two more containers for parallel processing on each queue
+	- `fabric:container-create-child --profile camel-broker1 root JDBCPocBroker3`
+ 	- `fabric:container-create-child --profile camel-broker2 root JDBCPocBroker4`
+	- `watch container-list`
+	![Camel broker 3 and 4 ](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture18.png)
+    
+6. Compile and run spring-db-populator client
+	- `cd <projects_dir>/spring-db-populator/`
+	- Edit file `./src/main/resources/jdbc-spring-context.xml` and change beans activemq and activemq2 to point at both brokers groups ports 
+	- `mvn clean package`
+	- `java -jar ./target/spring-db-populator-0.0.1-SNAPSHOT.jar 1 5000 1000` <br/> 
+	Note: On the client the parameters are 1 = start index, 5000 = how many inserts to execute, 1000 total parallel threads.
+    
 	
 
 
