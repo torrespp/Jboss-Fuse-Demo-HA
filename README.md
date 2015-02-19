@@ -87,10 +87,9 @@ Before running JBoss Fuse for the first time we need to configure user/password 
 ## Setup mq-brokers profile
 
 6. Create JMSBrokers profiles on karaf console
-	- `fabric:profile-create mq-brokers`
-	- `fabric:profile-edit --resource broker.xml mq-brokers`
-	- Paste the following xml text on **broker.xml** content:
-
+ * `fabric:profile-create mq-brokers`
+ * `fabric:profile-edit --resource broker.xml mq-brokers`
+ * Paste the following xml text on **broker.xml** content: 
 ```XML	
 <beans
 xmlns="http://www.springframework.org/schema/beans"
@@ -241,33 +240,37 @@ dataDir=/opt/tmp
 # Configure Camel project
 
 There are two projects:
-	- hainserter: Fuse route that reads sql commands and execute them on the real JDBC driver
-	- spring-db-populator: Batch testing client that insert data using spring
+ * hainserter: Fuse route that reads sql commands and execute them on the real JDBC driver
+ * spring-db-populator: Batch testing client that insert data using spring
 
-	
-1 Create PostgreSQL database:
-	- Create database jdbcpoc
-	- Create table and sequence with /<projects_dir>/spring-db-populator/src/main/resources/DATABASE_SCRIPT.sql
+1. Create PostgreSQL database:
+	- Create a Postgresql user called fusedemo
+	- Create database jdbcpoc and assign it to **fusedemo** user with password **12345678**
+	- Create table and sequence with provided script at `/<projects_dir>/spring-db-populator/src/main/resources/DATABASE_SCRIPT.sql`
 
-2 Install ha-inserter to Fuse
-	- Edit file /<projects_dir>/hainserter/src/main/fabric8/amq.properties and set datasource properties and activemq properties
+2. Install ha-inserter to Fuse. The next steps will deploy a new **camel-jdbcpoc** profile into fuse. For more information about how this is done check Readme.md file inside ha-inserter project.
+	- Edit file `/<projects_dir>/hainserter/src/main/fabric8/amq.properties` and set datasource properties and activemq properties. (No need if using demo defaults and postgresql fusedemo user)
 	- cd <projects_dir>/ha-inserter/
-	- Execute: mvn clean install fabric8:zip fabric8:deploy
+	- Execute: `mvn clean install fabric8:zip fabric8:deploy`. This will compile install into maven and deploy fuse projet into a fuse profile.
 	- Set fabric8 username and password when prompted. User: admin, password: admin
+    - Wait for build success<br/>
+    ![Fabric Brokers creation](https://github.com/igl100/JBossFuseHADemo/blob/mater/docs/image/Capture13.png)
+    
+	When deploy finished you can view the new profile using web console. Go to **Runtime/Manage** tabs and search for **camel-jdbcpoc** profile. 
 
-4 Customize two profiles at different ports for parallel processing on karaf console
-	- fabric:profile-create camel-broker1
-	- fabric:profile-change-parents camel-broker1 camel-jdbcpoc
-	- fabric:profile-edit --pid amq camel-broker1
-	- On editor add: port=61617
+3. Customize two profiles at different ports for parallel processing on karaf console
+	- `fabric:profile-create camel-broker1`
+	- `fabric:profile-change-parents camel-broker1 camel-jdbcpoc`
+	- `fabric:profile-edit --pid amq camel-broker1`
+	- On editor add: `port=61617`
 	- Save (ctrl+s) and exit editor (ctrl + x)
-	- fabric:profile-create camel-broker2
-	- fabric:profile-change-parents camel-broker2 camel-jdbcpoc
-	- fabric:profile-edit --pid amq camel-broker2
-	- On editor add: port=61618
+	- `fabric:profile-create camel-broker2`
+	- `fabric:profile-change-parents camel-broker2 camel-jdbcpoc`
+	- `fabric:profile-edit --pid amq camel-broker2`
+	- On editor add: `port=61618`
 	- Save (ctrl+s) and exit editor (ctrl + x)
 
-4 Create broker for executing route. On karaf console run:
+4. Create broker for executing route. On karaf console run:
 	- fabric:container-create-child --profile camel-broker1 root JDBCPocBroker1
 	- fabric:container-create-child --profile camel-broker2 root JDBCPocBroker2
 	- watch container-list
