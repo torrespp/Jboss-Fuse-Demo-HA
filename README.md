@@ -68,18 +68,29 @@ Before running JBoss Fuse for the first time we need to configure user/password 
 	![Karaf Console](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture2.png)
 
 3. Create a fabric so we can manage all the brokers from a single console:
-	- fabric:create --clean --wait-for-provisioning  --bind-address localhost --resolver manualip --global-resolver manualip --manual-ip localhost --zookeeper-password admin
+	- `fabric:create --clean --wait-for-provisioning  --bind-address localhost --resolver manualip --global-resolver manualip --manual-ip localhost --zookeeper-password admin`<br/><br/>
+    All this parameters are needed so that zookeeper and fuse fabric bind everything to **localhost** address. This is not what you need to do on production servers but since ipaddress might change on laptops or PC's fabric might not start correctly on different networks.
+    
+4. Validate that fabric created by running `container-list` on karaf console.
+	<br/>
+	![Container-list command](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture3.png)
 
-7 View Fabric is created:
-	- container-list
+5. Open URL http://localhost:8181 on a web browser and login with user admin and password admin<br/>
+	![Fabric Login](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture4.png)
+    <br/>
+    ![Fabric Home](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture5.png)
+    <br/>
+    ![Fabric Containers](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture6.png)
 
-8 Open URL http://localhost:8181 on a web browser and login with user admin and password admin
+# Setup JMS Broker Master/Slave Groups
 
-9 Create JMSBrokers profiles on karaf console
-	- fabric:profile-create mq-brokers
-	- fabric:profile-edit --resource broker.xml mq-brokers
-	- Paste broker.xml content, 
-	
+## Setup mq-brokers profile
+
+6. Create JMSBrokers profiles on karaf console
+	- `fabric:profile-create mq-brokers`
+	- `fabric:profile-edit --resource broker.xml mq-brokers`
+	- Paste the following xml text on **broker.xml** content: 
+```XML	
 <beans
 xmlns="http://www.springframework.org/schema/beans"
 xmlns:amq="http://activemq.apache.org/schema/core"
@@ -154,56 +165,77 @@ socketBufferSize=262144&amp;ioBufferSize=327680&amp;jms.useCompression=true;"/>
 </transportConnectors>
 </broker>
 </beans>
+```
+	- Save (ctrl+s) and exit editor (ctrl + x)<br/>
+	On Fabric configurations profiles are what define what projects, features, configurations and parameters will be available for brokers.<br/><br/>
+    In this case, what happened is that we create a new profile called **mq-brokers** that will have all JMS definition on a file called **broker.xml**.<br/>
+    Notice how the xml we use define some variables (Example ${ipaddress}). This variables will help us next because Fuse Fabric profiles are hierarchical. This means that any child profile of **mq-brokers** can override just the variables definitions to configure different enviorments.<br/><br/>
+    You can view the new profile on the web console too. Go to **Runtime/Manage** tabs and search for **mq-brokers** profile. Click on it and view how **broker.xml** file exists. You can also edit it visually on web console.
 
-	- Save (ctrl+s) and exit editor (ctrl + x)
+## Setup JMS Group1 profile and brokers
 
-10 Create brokers group one profile
-	- fabric:profile-create mq-group1
-	- fabric:profile-edit --pid org.fusesource.mq.fabric.server-broker mq-group1
+7. Since we want to configure two clusters we need a child profile for each group. Lets create brokers group one profile
+	- `fabric:profile-create mq-group1`
+	- `fabric:profile-edit --pid org.fusesource.mq.fabric.server-broker mq-group1`
 	- On editor add the next lines changing its values as needed:
+```Text
 brokerGroup=JMSGroup1
 port=61617
 ipaddress=127.0.0.1
-dataDir=/any/directory/location
+dataDir=/opt/tmp
+```
 	- Save (ctrl+s) and exit editor (ctrl + x)
+    
+    In this case we want to create a Master/Slave group named **brokerGroup** on port **61617** on ipaddress **127.0.0.1**. Notice hoy this variables are the ones defined on **mq-brokers/broker.xml** definition. Also notices that **dataDir** should exists, so if it isn't available, create it or change that value to an existing directory. 
 
-11 Change profiles parents
-	- profile-change-parents mq-brokers mq-default
-	- profile-change-parents mq-group1 mq-brokers
+8. We already explain that profiles are hierarchical so we need to change profiles parents
+	- `profile-change-parents mq-brokers mq-default` (Add mq-default profile as parent)
+	- `profile-change-parents mq-group1 mq-brokers` (Add mq-brokers profile as parent) <br/><br/>
+    As you can see, we add mq-default profile (already existing on fabric installation) to mq-brokers. This will add AMQ features to mq-brokers and also to mq-group1 since his parent is mq-brokers.
 
-12 Create Group1 containers
-	- fabric:container-create-child --jvm-opts "-Xmx2048m -Xms2048m" --profile mq-group1 root JMSGroup1 2
+9. Create Group1 containers. This are the actual brokers.
+	- `fabric:container-create-child --jvm-opts "-Xmx2048m -Xms2048m" --profile mq-group1 root JMSGroup1 2`<br/><br/>
+    Look how we assign **mq-group1** profile to the containers. Also look how we create two brokers by using the las **2** parameter. <br/>
+    ![Fabric Brokers creation](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture7.png)
 
-13 Wait until they are created and started
-	- watch container-list
+10. Wait until they are created and started
+	- `watch container-list`<br/>
+    ![Fabric Brokers creation](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture8.png)
 
-11 Check if cluster is started
-	- cluster-list
+11. Check if cluster is started
+	- `cluster-list`<br/>
+    ![Fabric Brokers creation](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture10.png)
 
-12 Create brokers group two profile
-	- fabric:profile-create mq-group2
-	- fabric:profile-edit --pid org.fusesource.mq.fabric.server-broker mq-group2
+## Setup JMS Group2 profile and brokers
+
+12. Create brokers group two profile
+	- `fabric:profile-create mq-group2`
+	- `fabric:profile-edit --pid org.fusesource.mq.fabric.server-broker mq-group2`
 	- On editor add the next lines changing its values as needed:
+```Text
 brokerGroup=JMSGroup2
 port=61618
 ipaddress=127.0.0.1
-dataDir=/any/directory/location
-	- Save (ctrl+s) and exit editor (ctrl + x)
+dataDir=/opt/tmp
+```
+	- Save (ctrl+s) and exit editor (ctrl + x)<br/>
+    Same step as mq-group1 profile but port changed to **61618**
 
-13 Change profiles parents
-	- profile-change-parents mq-group2 mq-brokers
+13. Change profiles parents
+	- `profile-change-parents mq-group2 mq-brokers`
 
-14 Create Group2 containers
-	- fabric:container-create-child --jvm-opts "-Xmx2048m -Xms2048m" --profile mq-group2 root JMSGroup2 2
+14. Create Group2 containers
+	- `fabric:container-create-child --jvm-opts "-Xmx2048m -Xms2048m" --profile mq-group2 root JMSGroup2 2`<br/>
 
-15 Wait until they are created and started
-	- watch container-list
+15. Wait until they are created and started
+	- `watch container-list`<br/>
+    ![Fabric Brokers creation](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture11.png)
 
-16 Check if cluster is started
-	- cluster-list
+16. Check if cluster is started
+	- `cluster-list`<br/>
+    ![Fabric Brokers creation](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture12.png)
 
-
-CONFIGURING PROJECTS
+# Configure Camel project
 
 There are two projects:
 	- hainserter: Fuse route that reads sql commands and execute them on the real JDBC driver
