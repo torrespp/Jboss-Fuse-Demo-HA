@@ -210,16 +210,16 @@ dataDir=/opt/tmp
 ## Setup JMS Group2 profile and brokers
 
 1. Create brokers group two profile
-	* `fabric:profile-create mq-group2`
-	* `fabric:profile-edit --pid org.fusesource.mq.fabric.server-broker mq-group2`
-	* On editor add the next lines changing its values as needed:
+	- `fabric:profile-create mq-group2`
+	- `fabric:profile-edit --pid org.fusesource.mq.fabric.server-broker mq-group2`
+	- On editor add the next lines changing its values as needed:
 ```Text
 brokerGroup=JMSGroup2
 port=61618
 ipaddress=127.0.0.1
 dataDir=/opt/tmp
 ```
-	* Save (ctrl+s) and exit editor (ctrl + x)
+	- Save (ctrl+s) and exit editor (ctrl + x)
     
     Same step as mq-group1 profile but port changed to **61618**
 
@@ -273,21 +273,38 @@ There are two projects:
 4. Create broker for executing route. On karaf console run:
 	- `fabric:container-create-child --profile camel-broker1 root JDBCPocBroker1`
 	- `fabric:container-create-child --profile camel-broker2 root JDBCPocBroker2`
-	- `watch container-list
+	- `watch container-list`
 	![Camel broker 1 and 2 ](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture17.png)
 
-5. Create two more containers for parallel processing on each queue
-	- `fabric:container-create-child --profile camel-broker1 root JDBCPocBroker3`
- 	- `fabric:container-create-child --profile camel-broker2 root JDBCPocBroker4`
-	- `watch container-list`
-	![Camel broker 3 and 4 ](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture18.png)
-    
+# Testing Inserts
+
 6. Compile and run spring-db-populator client
 	- `cd <projects_dir>/spring-db-populator/`
 	- Edit file `./src/main/resources/jdbc-spring-context.xml` and change beans activemq and activemq2 to point at both brokers groups ports 
 	- `mvn clean package`
 	- `java -jar ./target/spring-db-populator-0.0.1-SNAPSHOT.jar 1 5000 1000` <br/> 
 	Note: On the client the parameters are 1 = start index, 5000 = how many inserts to execute, 1000 total parallel threads.
+    
+    This brokers now are listening at two master/slave groups. JDBCPocBroker1 is listening at messages arriving at JMS Brokers 61617 port and JDBCPocBroker2 is listening at messages arriving at JMS Brokers 61618 port.<br/>
+    Run the client and check how fast its inserting data arriving from client.
+    The client will insert using multithreading to both JMS ports.
+    
+# Testing HA
+
+    Test HA at JMS Brokers by running the client with 100000 inserts and shutdown one of the JMS Brokers. You will see on client how it is disconnested and the reconnected when slave broker of that group becomes master. You can also use ´cluster-list` command on karaf console to see how slave broker is now master after fail.
+
+# Increasing performance
+
+1. Create two more camel containers listening to JMS Brokers for parallel processing on each queue
+	- `fabric:container-create-child --profile camel-broker1 root JDBCPocBroker3`
+ 	- `fabric:container-create-child --profile camel-broker2 root JDBCPocBroker4`
+	- `watch container-list`<br/>
+	![Camel broker 3 and 4 ](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture18.png)
+    
+   Now there are two camel brokers listening at messages at port 61617 and two more listenint at port 61618. Review that speed increase on inserts. Look how easy was to create two more camel brokers by using the same profiles we already created.
+    
+Thats all folks
+
     
 	
 
