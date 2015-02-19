@@ -1,12 +1,13 @@
 package com.redhat.poc.jdbc;
 
 import java.sql.SQLException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.redhat.poc.jdbc.JdbcPocDAO;
-import com.redhat.poc.jdbc.dto.JdbcPocDTO;
 import com.redhat.poc.jdbc.exception.BusinessException;
 import com.redhat.poc.jdbc.exception.ServiceInitializationException;
 
@@ -20,38 +21,26 @@ public class Main {
 		ctx = new ClassPathXmlApplicationContext("jdbc-spring-context.xml");
 	}
 
-	public void executeBulkTest(int initVal, int ammount)
-			throws ServiceInitializationException, BusinessException,
-			SQLException {
+	public void executeBulkTest(int initVal, int ammount, int threadPoolNumber) throws InterruptedException {
 		log.debug("Iniciando simple test");
-		JdbcPocDAO dao = ctx.getBean(JdbcPocDAO.class);
+		ExecutorService service = Executors.newFixedThreadPool(50);
 		for (int i = initVal; i < initVal+ammount; i++) {
-			log.debug("Iniciando Dao: "+i);
-			dao.init();
-			log.debug("Registrando modelo AAAA"+i+".txt");
-			dao.registerJdbcPocRegistre(getJdbcPocDTO(i));
-			log.debug("Deteniendo registrado");
-			dao.stop();
-			log.debug("Dao detenido");
+			service.execute(new JdbcPocThread(i,ctx));
 		}
-	}
-
-	private JdbcPocDTO getJdbcPocDTO(int index) {
-		JdbcPocDTO dto = new JdbcPocDTO();
-		dto.setModel("AAAA" + index + ".txt");
-		dto.setModelId(index);
-		return dto;
+		service.awaitTermination(2,TimeUnit.MINUTES);
+		
 	}
 
 	public static void main(String[] args) {
 		Main main;
 		try {
 			main = new Main();
-			int initVal = Integer.parseInt(args[0]);
+			int initVal = Integer.parseInt(args[0]);	
 			int ammount = Integer.parseInt(args[1]);
-			main.executeBulkTest(initVal, ammount);
+			int threadNumber = Integer.parseInt(args[2]);
+			main.executeBulkTest(initVal, ammount, threadNumber);
 		} catch (SQLException | ServiceInitializationException
-				| BusinessException e) {
+				| BusinessException | InterruptedException e) {
 			log.error("Error al ejecutar la prueba..", e);
 		}
 		System.exit(0);

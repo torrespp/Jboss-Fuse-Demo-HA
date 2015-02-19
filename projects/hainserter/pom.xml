@@ -263,7 +263,8 @@
 			<plugin>
 				<groupId>io.fabric8</groupId>
 				<artifactId>fabric8-maven-plugin</artifactId>
-				<version>1.2.0.redhat-060</version>
+				<!--version>1.2.0.redhat-060</version -->
+                <version>1.2.0.Beta4</version>
 				<configuration>
 					<profile>camel-jdbcpoc</profile>
 					<jolokiaUrl>http://localhost:8181/jolokia</jolokiaUrl>
