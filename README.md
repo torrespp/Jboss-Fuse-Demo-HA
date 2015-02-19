@@ -244,14 +244,14 @@ There are two projects:
  * spring-db-populator: Batch testing client that insert data using spring
 
 1. Create PostgreSQL database:
-	- Create a Postgresql user called fusedemo
-	- Create database jdbcpoc and assign it to **fusedemo** user with password **12345678**
+	- Create a Postgresql user called **fusedemo** with password **12345678**
+	- Create database jdbcpoc and assign it to **fusedemo** user 
 	- Create table and sequence with provided script at `/<projects_dir>/spring-db-populator/src/main/resources/DATABASE_SCRIPT.sql`
 
 2. Install ha-inserter to Fuse. The next steps will deploy a new **camel-jdbcpoc** profile into fuse. For more information about how this is done check Readme.md file inside ha-inserter project.
 	- Edit file `/<projects_dir>/hainserter/src/main/fabric8/amq.properties` and set datasource properties and activemq properties. (No need if using demo defaults and postgresql fusedemo user)
 	- cd <projects_dir>/ha-inserter/
-	- Execute: `mvn clean install fabric8:zip fabric8:deploy`. This will compile install into maven and deploy fuse projet into a fuse profile.
+	- Execute: `mvn clean install fabric8:deploy`. This will compile install into maven and deploy fuse projet into a fuse profile.
 	- Set fabric8 username and password when prompted. User: admin, password: admin
     - Wait for build success<br/>
     ![Fabric camel deploy](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture13.png)
