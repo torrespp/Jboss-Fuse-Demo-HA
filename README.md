@@ -291,7 +291,7 @@ There are two projects:
     
 # Testing HA
 
-    Test HA at JMS Brokers by running the client with 100000 inserts and shutdown one of the JMS Brokers. You will see on client how it is disconnested and the reconnected when slave broker of that group becomes master. You can also use ´cluster-list` command on karaf console to see how slave broker is now master after fail.
+Test HA at JMS Brokers by running the client with 100000 inserts and shutdown one of the JMS Brokers. You will see on client how it is disconnested and the reconnected when slave broker of that group becomes master. You can also use ´cluster-list` command on karaf console to see how slave broker is now master after fail.
 
 # Increasing performance
 
