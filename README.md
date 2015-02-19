@@ -254,7 +254,7 @@ There are two projects:
 	- Execute: `mvn clean install fabric8:zip fabric8:deploy`. This will compile install into maven and deploy fuse projet into a fuse profile.
 	- Set fabric8 username and password when prompted. User: admin, password: admin
     - Wait for build success<br/>
-    ![Fabric Brokers creation](https://github.com/igl100/JBossFuseHADemo/blob/mater/docs/image/Capture13.png)
+    ![Fabric camel deploy](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture13.png)
     
 	When deploy finished you can view the new profile using web console. Go to **Runtime/Manage** tabs and search for **camel-jdbcpoc** profile. 
 
