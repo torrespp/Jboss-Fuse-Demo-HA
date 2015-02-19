@@ -138,4 +138,10 @@ This plugin defines what profile will be created inside fuse and what features w
 ```
 
 Using `<configuration>` tag we define that the new profile name will be **camel-jdbcpoc**. The `<jolokiaUrl>` defines where the fuse fabric is running (change this for remote deployment), `<parentProfiles>` define which profiles will be this profile parents and `<features>` define what fuse features we need. <br/>
-Look at `<bundles>` tag. It defines what other osgi bundles we need to import. This bundles MUST to exist and be installed on maven repository. It is also important to notice the `wrap:` prefix on postgres driver definition. In order to use jars inside osgi bunles, this jars must have MANIFEST.MF osgi data (like we defined on apache felix maven plugin). This data is no existing on many jars so the **wrap** prefix instruct fabric plugin to create this data inside the jar manifest (In this case postgresql adbc driver jar).  Use wrap prefix on any jar needed inside maven with is not a bundle.
+Look at `<bundles>` tag. It defines what other osgi bundles we need to import. This bundles MUST to exist and be installed on maven repository. It is also important to notice the `wrap:` prefix on postgres driver definition. In order to use jars inside osgi bunles, this jars must have MANIFEST.MF osgi data (like we defined on apache felix maven plugin). This data is no existing on many jars so the **wrap** prefix instruct fabric plugin to create this data inside the jar manifest (In this case postgresql adbc driver jar).  Use wrap prefix on any jar needed inside maven with is not a bundle.<br/><br/>
+If you want to try this demo using a different database (mysql, sqlserver, oracle, etc) change `wrap:mvn:org.postgresql/postgresql/9.2-1002-jdbc4` and point it to database jdbc driver (Ex. `wrap:mvn:ojdbc/ojdbc/14` for oracle)
+
+# Running installation
+
+In order tu install this project to JBoss Fuse run: `mvn clean install fabric8:deploy` and use fabric username and password when maven ask for them.
+
