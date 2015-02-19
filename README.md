@@ -29,7 +29,7 @@ This demo will include information about several topics wich include:
 4. Web Browser
 5. Basic Linux commands understanding
 6. PostgreSQL 9.3 or superior installed
-7. PostgreSQL basic understanding
+7. PostgreSQL administration understanding (Create users, databases and running scripts)
 8. Internet connection
 
 # Setup JBoss Fuse
@@ -166,44 +166,44 @@ socketBufferSize=262144&amp;ioBufferSize=327680&amp;jms.useCompression=true;"/>
 </broker>
 </beans>
 ```
- * Save (ctrl+s) and exit editor (ctrl + x)
+	- Save (ctrl+s) and exit editor (ctrl + x)
     
-	On Fabric configurations profiles are what define what projects, features, configurations and parameters will be available for brokers.<br/><br/>
-    In this case, what happened is that we create a new profile called **mq-brokers** that will have all JMS definition on a file called **broker.xml**.<br/>
-    Notice how the xml we use define some variables (Example ${ipaddress}). This variables will help us next because Fuse Fabric profiles are hierarchical. This means that any child profile of **mq-brokers** can override just the variables definitions to configure different enviorments.<br/><br/>
-    You can view the new profile on the web console too. Go to **Runtime/Manage** tabs and search for **mq-brokers** profile. Click on it and view how **broker.xml** file exists. You can also edit it visually on web console.
+On Fabric configurations profiles are what define what projects, features, configurations and parameters will be available for brokers.<br/><br/>
+In this case, what happened is that we create a new profile called **mq-brokers** that will have all JMS definition on a file called **broker.xml**.<br/>
+Notice how the xml we use define some variables (Example ${ipaddress}). This variables will help us next because Fuse Fabric profiles are hierarchical. This means that any child profile of **mq-brokers** can override just the variables definitions to configure different enviorments.<br/><br/>
+You can view the new profile on the web console too. Go to **Runtime/Manage** tabs and search for **mq-brokers** profile. Click on it and view how **broker.xml** file exists. You can also edit it visually on web console.
 
 ## Setup JMS Group1 profile and brokers
 
-7. Since we want to configure two clusters we need a child profile for each group. Lets create brokers group one profile
-	* `fabric:profile-create mq-group1`
-	* `fabric:profile-edit --pid org.fusesource.mq.fabric.server-broker mq-group1`
-	* On editor add the next lines changing its values as needed:
+1. Since we want to configure two clusters we need a child profile for each group. Lets create brokers group one profile
+	- `fabric:profile-create mq-group1`
+	- `fabric:profile-edit --pid org.fusesource.mq.fabric.server-broker mq-group1`
+	- On editor add the next lines changing its values as needed:
 ```Text
 brokerGroup=JMSGroup1
 port=61617
 ipaddress=127.0.0.1
 dataDir=/opt/tmp
 ```
-	* Save (ctrl+s) and exit editor (ctrl + x)
+	- Save (ctrl+s) and exit editor (ctrl + x)
     
-    In this case we want to create a Master/Slave group named **brokerGroup** on port **61617** on ipaddress **127.0.0.1**. Notice hoy this variables are the ones defined on **mq-brokers/broker.xml** definition. Also notices that **dataDir** should exists, so if it isn't available, create it or change that value to an existing directory. 
+In this case we want to create a Master/Slave group named **brokerGroup** on port **61617** on ipaddress **127.0.0.1**. Notice hoy this variables are the ones defined on **mq-brokers/broker.xml** definition. Also notices that **dataDir** should exists, so if it isn't available, create it or change that value to an existing directory. 
 
-8. We already explain that profiles are hierarchical so we need to change profiles parents
+2. We already explain that profiles are hierarchical so we need to change profiles parents
 	- `profile-change-parents mq-brokers mq-default` (Add mq-default profile as parent)
 	- `profile-change-parents mq-group1 mq-brokers` (Add mq-brokers profile as parent) <br/><br/>
     As you can see, we add mq-default profile (already existing on fabric installation) to mq-brokers. This will add AMQ features to mq-brokers and also to mq-group1 since his parent is mq-brokers.
 
-9. Create Group1 containers. This are the actual brokers.
+3. Create Group1 containers. This are the actual brokers.
 	- `fabric:container-create-child --jvm-opts "-Xmx2048m -Xms2048m" --profile mq-group1 root JMSGroup1 2`<br/><br/>
     Look how we assign **mq-group1** profile to the containers. Also look how we create two brokers by using the las **2** parameter. <br/>
     ![Fabric Brokers creation](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture7.png)
 
-10. Wait until they are created and started
+4. Wait until they are created and started
 	- `watch container-list`<br/>
     ![Fabric Brokers creation](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture8.png)
 
-11. Check if cluster is started
+5. Check if cluster is started
 	- `cluster-list`<br/>
     ![Fabric Brokers creation](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture10.png)
 
@@ -221,7 +221,7 @@ dataDir=/opt/tmp
 ```
 	- Save (ctrl+s) and exit editor (ctrl + x)
     
-    Same step as mq-group1 profile but port changed to **61618**
+Same step as mq-group1 profile but port changed to **61618**
 
 13. Change profiles parents
 	- `profile-change-parents mq-group2 mq-brokers`
