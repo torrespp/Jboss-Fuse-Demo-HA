@@ -1,9 +1,15 @@
 # Introduction
 
 This demo was created to review some general features of JBoss Fuse 6.0. <br/>
-It was created to help new fuse developers to understand a full development cycle of a project including using it on a HA enviorment. <br/><BR/>
+It was created to help new fuse developers to understand a full development cycle of a project including using it on a HA enviorment. <br/><br/>
 ENJOY!!!!
 
+# Demo Architecture
+
+What this demo does is to provide a client that send sql insert commands to activemq brokers. There are four JMS brokers grouped in two Master/Slave settings. By doing this we create two Active/Active groups and each group has an Active/Passive (Master/Slave) configuration.<br/>
+We will also create four camel rout brokers. Two of this brokers will listen to JMS Group 1 and the other two will listen to JMS Group 2. This camel rout brokers will read every insert sql command and execute it on a postgresql database.<br/>
+Here is a diagram showing all this:<br/>
+![Demo Architecture](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/FuseHADemoArq.jpg)
 
 ## Objectives
 
