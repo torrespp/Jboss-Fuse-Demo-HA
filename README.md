@@ -213,27 +213,27 @@ In this case we want to create a Master/Slave group named **brokerGroup** on por
 	- `fabric:profile-create mq-group2`
 	- `fabric:profile-edit --pid org.fusesource.mq.fabric.server-broker mq-group2`
 	- On editor add the next lines changing its values as needed:
-```Text
-brokerGroup=JMSGroup2
-port=61618
-ipaddress=127.0.0.1
-dataDir=/opt/tmp
-```
+	```Text
+	brokerGroup=JMSGroup2
+	port=61618
+	ipaddress=127.0.0.1
+	dataDir=/opt/tmp
+	```
 	- Save (ctrl+s) and exit editor (ctrl + x)
     
 Same step as mq-group1 profile but port changed to **61618**
 
-13. Change profiles parents
+2. Change profiles parents
 	- `profile-change-parents mq-group2 mq-brokers`
 
-14. Create Group2 containers
+3. Create Group2 containers
 	- `fabric:container-create-child --jvm-opts "-Xmx2048m -Xms2048m" --profile mq-group2 root JMSGroup2 2`
 
-15. Wait until they are created and started
+4. Wait until they are created and started
 	- `watch container-list`<br/>
     ![Fabric Brokers creation](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture11.png)
 
-16. Check if cluster is started
+5. Check if cluster is started
 	- `cluster-list`<br/>
     ![Fabric Brokers creation](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture12.png)
 
