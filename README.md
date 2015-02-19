@@ -89,7 +89,7 @@ Before running JBoss Fuse for the first time we need to configure user/password 
 6. Create JMSBrokers profiles on karaf console
  * `fabric:profile-create mq-brokers`
  * `fabric:profile-edit --resource broker.xml mq-brokers`
- * Paste the following xml text on **broker.xml** content: 
+ * Paste the following xml text on **broker.xml** content:<br/> 
 	```XML	
 <beans
 xmlns="http://www.springframework.org/schema/beans"
