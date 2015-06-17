@@ -172,7 +172,7 @@ socketBufferSize=262144&amp;ioBufferSize=327680&amp;jms.useCompression=true;"/>
 </transportConnectors>
 </broker>
 </beans>
-	```
+```
 	- Save (ctrl+s) and exit editor (ctrl + x)
     
 	On Fabric configurations profiles are what define what projects, features, configurations and parameters will be available for brokers.<br/><br/>
