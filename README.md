@@ -173,9 +173,9 @@ socketBufferSize=262144&amp;ioBufferSize=327680&amp;jms.useCompression=true;"/>
 </broker>
 </beans>
 ```
-	- Save (ctrl+s) and exit editor (ctrl + x)
+- Save (ctrl+s) and exit editor (ctrl + x)
     
-	On Fabric configurations profiles are what define what projects, features, configurations and parameters will be available for brokers.<br/><br/>
+On Fabric configurations profiles are what define what projects, features, configurations and parameters will be available for brokers.<br/><br/>
 In this case, what happened is that we create a new profile called **mq-brokers** that will have all JMS definition on a file called **broker.xml**.<br/>
 	Notice how the xml we use define some variables (Example ${ipaddress}). This variables will help us next because Fuse Fabric profiles are hierarchical. This means that any child profile of **mq-brokers** can override just the variables definitions to configure different enviorments.<br/><br/>
 	You can view the new profile on the web console too. Go to **Runtime/Manage** tabs and search for **mq-brokers** profile. Click on it and view how **broker.xml** file exists. You can also edit it visually on web console.
