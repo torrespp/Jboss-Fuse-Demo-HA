@@ -1,6 +1,6 @@
 # Introduction
 
-This demo was created to review some general features of JBoss Fuse 6.0. <br/>
+This demo was created to review some general features of JBoss Fuse 6.1.1 <br/>
 It was created to help new fuse developers to understand a full development cycle of a project including using it on a HA enviorment. <br/><br/>
 ENJOY!!!!
 
@@ -29,7 +29,7 @@ This demo will include information about several topics wich include:
 
 ## Pre-Requisites
 
-1. JBoss Fuse 6.0 zip installation file 
+1. JBoss Fuse 6.1.1 zip installation file 
 2. Java JDK 7 installed
 3. Apache Maven 3.1.1 version installed
 4. Web Browser
@@ -47,10 +47,10 @@ This demo will include information about several topics wich include:
 1. Unzip JBoss Fuse on any directory that you wish to use as $FUSE_HOME. In this example i will use directory `/opt/redhat/`. Copy JBoss Fuse installation zip file on the selected directory and be sure your user have read, write and execute privileges.
 
 	- `cd /opt/redhat`
-	- `unzip jboss-fuse-full-6.1.0.redhat-379.zip`<br/>
+	- `unzip jboss-fuse-full-6.1.1.redhat-412.zip`<br/>
     ![Unzip Command](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture1.png)
     
-	- `export FUSE_HOME=/opt/redhat/jboss-fuse-full-6.1.0.redhat-379`
+	- `export FUSE_HOME=/opt/redhat/jboss-fuse-full-6.1.1.redhat-412`
 
 	Thats it!!!, JBoss Fuse is already install!!!
  
