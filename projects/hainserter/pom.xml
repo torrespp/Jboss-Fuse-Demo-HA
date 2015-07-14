@@ -14,6 +14,17 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <apache.camel.version>2.12.0.redhat-610379</apache.camel.version>
+        <amq.version>5.11.0.redhat-620133</amq.version>
+        <springframework.version>3.2.8.RELEASE</springframework.version>
+        <org.apache.xbean.version>3.15</org.apache.xbean.version>
+        <org.slf4j.version>1.7.5</org.slf4j.version>
+        <org.postgresql.version>9.2-1002-jdbc4</org.postgresql.version>
+        <log4j.version>1.2.17</log4j.version>
+        <org.apache.felix.version>2.3.7</org.apache.felix.version>
+        <org.apache.servicemix.bundles.version>1.4_3</org.apache.servicemix.bundles.version>
+        <commons.dbcp.version>1.4</commons.dbcp.version>
+        
 	</properties>
 
 	<repositories>
@@ -92,44 +103,44 @@
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-core</artifactId>
-			<version>2.12.0.redhat-610379</version>
+            <version>${apache.camel.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-jms</artifactId>
-			<version>2.12.0.redhat-610379</version>
+			<version>${apache.camel.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-spring</artifactId>
-			<version>2.12.0.redhat-610379</version>
+			<version>${apache.camel.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-jdbc</artifactId>
-			<version>2.12.0.redhat-610379</version>
+			<version>${apache.camel.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-sql</artifactId>
-			<version>2.12.0.redhat-610379</version>
+			<version>${apache.camel.version}</version>
 		</dependency>
 
 		<!-- the ActiveMQ client with connection pooling -->
 		<dependency>
 			<groupId>org.apache.activemq</groupId>
 			<artifactId>activemq-client</artifactId>
-			<version>5.9.0</version>
+            <version>${amq.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.activemq</groupId>
 			<artifactId>activemq-camel</artifactId>
-			<version>5.9.0</version>
+			<version>${amq.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.activemq</groupId>
 			<artifactId>activemq-pool</artifactId>
-			<version>5.9.0</version>
+			<version>${amq.version}</version>
 		</dependency>
 
 		<!-- the ActiveMQ broker is optional and can be removed if connecting to 
@@ -137,68 +148,61 @@
 		<dependency>
 			<groupId>org.apache.activemq</groupId>
 			<artifactId>activemq-broker</artifactId>
-			<version>5.9.0</version>
+			<version>${amq.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.activemq</groupId>
 			<artifactId>activemq-spring</artifactId>
-			<version>5.9.0</version>
+			<version>${amq.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.activemq</groupId>
 			<artifactId>activemq-kahadb-store</artifactId>
-			<version>5.9.0</version>
+			<version>${amq.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.xbean</groupId>
 			<artifactId>xbean-spring</artifactId>
-			<version>3.15</version>
+            <version>${org.apache.xbean.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>3.2.8.RELEASE</version>
+            <version>${springframework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
-			<version>3.2.8.RELEASE</version>
+			<version>${springframework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>9.2-1002-jdbc4</version>
+            <version>${org.postgresql.version}</version>
 		</dependency>
 
 		<!-- logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.5</version>
+            <version>${org.slf4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.5</version>
+			<version>${org.slf4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>org.osgi.core</artifactId>
-			<version>1.0.0</version>
-			<scope>compile</scope>
+            <version>${log4j.version}</version>
 		</dependency>
 
 		<!-- testing -->
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-test-spring</artifactId>
-			<version>2.12.0.redhat-610379</version>
+			<version>${apache.camel.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -206,12 +210,12 @@
 			<artifactId>
 				org.apache.servicemix.bundles.commons-dbcp
 			</artifactId>
-			<version>1.4_3</version>
+            <version>${org.apache.servicemix.bundles.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>
-			<version>1.4</version>
+            <version>${commons.dbcp.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -238,7 +242,7 @@
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
-				<version>2.5.3</version>
+				<version>${org.apache.felix.version}</version>
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
@@ -263,8 +267,6 @@
 			<plugin>
 				<groupId>io.fabric8</groupId>
 				<artifactId>fabric8-maven-plugin</artifactId>
-				<!--version>1.2.0.redhat-060</version -->
-                <version>1.2.0.Beta4</version>
 				<configuration>
 					<profile>camel-jdbcpoc</profile>
 					<jolokiaUrl>http://localhost:8181/jolokia</jolokiaUrl>
