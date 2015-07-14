@@ -280,8 +280,8 @@ There are two projects:
 	- Save (ctrl+s) and exit editor (ctrl + x)
 
 4. Create broker for executing route. On karaf console run:
-	- `fabric:container-create-child --profile camel-broker1 root JDBCPocBroker1`
-	- `fabric:container-create-child --profile camel-broker2 root JDBCPocBroker2`
+	- `fabric:container-create-child --profile camel-broker1 root jdbcpoc-broker1`
+	- `fabric:container-create-child --profile camel-broker2 root jdbcpoc-broker2`
 	- `watch container-list`
 	![Camel broker 1 and 2 ](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture17.png)
 
@@ -305,8 +305,8 @@ Test HA at JMS Brokers by running the client with 100000 inserts and shutdown on
 # Increasing performance
 
 1. Create two more camel containers listening to JMS Brokers for parallel processing on each queue
-	- `fabric:container-create-child --profile camel-broker1 root JDBCPocBroker3`
- 	- `fabric:container-create-child --profile camel-broker2 root JDBCPocBroker4`
+	- `fabric:container-create-child --profile camel-broker1 root jdbcpoc-broker3`
+ 	- `fabric:container-create-child --profile camel-broker2 root jdbcpoc-broker4`
 	- `watch container-list`<br/>
 	![Camel broker 3 and 4 ](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture18.png)
     
