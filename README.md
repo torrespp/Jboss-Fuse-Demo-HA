@@ -202,7 +202,8 @@ In this case, what happened is that we create a new profile called **mq-brokers*
     As you can see, we add mq-default profile (already existing on fabric installation) to mq-brokers. This will add AMQ features to mq-brokers and also to mq-group1 since his parent is mq-brokers.
 
 3. Create Group1 containers. This are the actual brokers.
-	- `fabric:container-create-child --jvm-opts "-Xmx2048m -Xms2048m" --profile mq-group1 root JMSGroup1 2`<br/><br/>
+	- `fabric:container-create-child --jvm-opts "-Xmx2048m -Xms2048m" --profile mq-group1 root jms-group1_1`<br/>
+	- `fabric:container-create-child --jvm-opts "-Xmx2048m -Xms2048m" --profile mq-group1 root jms-group1_2`<br/><br/>
     Look how we assign **mq-group1** profile to the containers. Also look how we create two brokers by using the las **2** parameter. <br/>
     ![Fabric Brokers creation](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture7.png)
 
@@ -234,7 +235,8 @@ In this case, what happened is that we create a new profile called **mq-brokers*
 	- `profile-change-parents mq-group2 mq-brokers`
 
 3. Create Group2 containers
-	- `fabric:container-create-child --jvm-opts "-Xmx2048m -Xms2048m" --profile mq-group2 root JMSGroup2 2`
+	- `fabric:container-create-child --jvm-opts "-Xmx2048m -Xms2048m" --profile mq-group2 root jms-group2_1`<br/>
+	- `fabric:container-create-child --jvm-opts "-Xmx2048m -Xms2048m" --profile mq-group2 root jms-group2_2`<br/><br/>
 
 4. Wait until they are created and started
 	- `watch container-list`<br/>
