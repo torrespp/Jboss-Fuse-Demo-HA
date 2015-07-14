@@ -1,6 +1,6 @@
 # Introduction
 
-This demo was created to review some general features of JBoss Fuse 6.1.1 <br/>
+This demo was created to review some general features of JBoss Fuse 6.2.0 <br/>
 It was created to help new fuse developers to understand a full development cycle of a project including using it on a HA enviorment. <br/><br/>
 ENJOY!!!!
 
@@ -29,7 +29,7 @@ This demo will include information about several topics wich include:
 
 ## Pre-Requisites
 
-1. JBoss Fuse 6.1.1 zip installation file 
+1. JBoss Fuse 6.2.0 zip installation file 
 2. Java JDK 7 installed
 3. Apache Maven 3.1.1 version installed
 4. Web Browser
@@ -47,10 +47,10 @@ This demo will include information about several topics wich include:
 1. Unzip JBoss Fuse on any directory that you wish to use as $FUSE_HOME. In this example i will use directory `/opt/redhat/`. Copy JBoss Fuse installation zip file on the selected directory and be sure your user have read, write and execute privileges.
 
 	- `cd /opt/redhat`
-	- `unzip jboss-fuse-full-6.1.1.redhat-412.zip`<br/>
+	- `unzip jboss-fuse-full-6.2.0.redhat-133.zip`<br/>
     ![Unzip Command](https://github.com/igl100/JBossFuseHADemo/blob/master/docs/image/Capture1.png)
     
-	- `export FUSE_HOME=/opt/redhat/jboss-fuse-full-6.1.1.redhat-412`
+	- `export FUSE_HOME=/opt/redhat/jboss-fuse-6.2.0.redhat-133`
 
 	Thats it!!!, JBoss Fuse is already install!!!
  
@@ -106,9 +106,9 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
 http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd">
 <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-<property name="properties">
-<bean class="org.fusesource.mq.fabric.ConfigurationProperties"/>
-</property>
+    <property name="properties">
+        <bean class="io.fabric8.mq.fabric.ConfigurationProperties"/>
+    </property>
 </bean>
 <broker xmlns="http://activemq.apache.org/schema/core"
 brokerName="${broker-name}"
@@ -184,7 +184,7 @@ In this case, what happened is that we create a new profile called **mq-brokers*
 
 1. Since we want to configure two clusters we need a child profile for each group. Lets create brokers group one profile
 	- `fabric:profile-create mq-group1`
-	- `fabric:profile-edit --pid org.fusesource.mq.fabric.server-broker mq-group1`
+	- `fabric:profile-edit --pid io.fabric8.mq.fabric.server-broker mq-group1`
 	- On editor add the next lines changing its values as needed:
 	```Text
 	brokerGroup=JMSGroup1
@@ -218,7 +218,7 @@ In this case, what happened is that we create a new profile called **mq-brokers*
 
 1. Create brokers group two profile
 	- `fabric:profile-create mq-group2`
-	- `fabric:profile-edit --pid org.fusesource.mq.fabric.server-broker mq-group2`
+	- `fabric:profile-edit --pid io.fabric8.mq.fabric.server-broker mq-group2`
 	- On editor add the next lines changing its values as needed:
 	```Text
 	brokerGroup=JMSGroup2
