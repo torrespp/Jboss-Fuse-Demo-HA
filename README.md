@@ -294,7 +294,7 @@ There are two projects:
 	- `java -jar ./target/spring-db-populator-0.0.1-SNAPSHOT.jar 1 5000 1000` <br/> 
 	Note: On the client the parameters are 1 = start index, 5000 = how many inserts to execute, 1000 total parallel threads.
     
-    This brokers now are listening at two master/slave groups. JDBCPocBroker1 is listening at messages arriving at JMS Brokers 61617 port and JDBCPocBroker2 is listening at messages arriving at JMS Brokers 61618 port.<br/>
+    This brokers now are listening at two master/slave groups. jdbcpoc-broker1 is listening at messages arriving at JMS Brokers 61617 port and jdbcpoc-broker2 is listening at messages arriving at JMS Brokers 61618 port.<br/>
     Run the client and check how fast its inserting data arriving from client.
     The client will insert using multithreading to both JMS ports.
     
