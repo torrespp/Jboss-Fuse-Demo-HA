@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jms="http://www.springframework.org/schema/jms"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms.xsd">
+    <bean id="activemq" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<property name="brokerURL"
+			value="failover:(tcp://localhost:61617)?randomize=false&amp;initialReconnectDelay=500&amp;maxReconnectAttempts=3&amp;timeout=10000" />
+		<property name="userName" value="admin" />
+		<property name="password" value="admin" />
+	</bean>
+	
+	<bean id="activemq2" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<property name="brokerURL"
+			value="failover:(tcp://localhost:61618)?randomize=false&amp;initialReconnectDelay=500&amp;maxReconnectAttempts=3&amp;timeout=10000" />
+		<property name="userName" value="admin" />
+		<property name="password" value="admin" />
+	</bean>
+
+	<bean id="jmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory"
+		destroy-method="stop">
+		<property name="connectionFactory" ref="activemq" />
+	</bean>
+
+	<bean id="destination" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="jdbcwriter" />
+	</bean>
+
+	<!-- Spring JMS Template -->
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="jmsFactory" />
+		<property name="defaultDestination" ref="destination"/>
+	</bean>
+
+	<bean id="jmsFactory2" class="org.apache.activemq.pool.PooledConnectionFactory"
+		destroy-method="stop">
+		<property name="connectionFactory" ref="activemq2" />
+	</bean>
+	
+	<bean id="jmsTemplate2" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="jmsFactory2" />
+		<property name="defaultDestination" ref="destination"/>
+	</bean>
+
+	<bean id="jdbcPocDao" class="com.redhat.poc.jdbc.JdbcPocDAO">
+		<!-- property name="dataSource" ref="dataSource" / -->
+		<property name="jmsTemplate" ref="jmsTemplate" />
+		<property name="jmsTemplate2" ref="jmsTemplate2" />
+	</bean>
+
+</beans>
