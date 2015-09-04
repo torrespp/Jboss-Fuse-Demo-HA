@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Configures the Camel Context -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:amq="http://activemq.apache.org/schema/core"
+	xmlns:osgi="http://www.springframework.org/schema/osgi" xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+       http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd
+       http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
+       http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
+
+	<osgix:cm-properties id="props" persistent-id="amq" />
+	<context:property-placeholder
+		properties-ref="props"></context:property-placeholder>
+
+	<bean id="activemq" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<property name="brokerURL"
+			value="failover:(tcp://${ipaddress}:${port})?jms.optimizeAcknowledge=true&amp;jms.prefetchPolicy.queuePrefetch=5000&amp;timeout=3000" />
+		<property name="userName" value="${username}" />
+		<property name="password" value="${password}" />
+	</bean>
+
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="org.postgresql.Driver" />
+		<property name="url"
+			value="jdbc:postgresql://${dbipaddress}:${dbport}/${dbname}" />
+		<property name="username" value="${dbusername}" />
+		<property name="password" value="${dbpassword}" /> 
+		<!-- Other properties 
+		<property name="initialSize" value="4"/> 
+		<property name="maxActive" value="32"/> 
+		<property name="maxIdle" value="16"/>
+		<property name="minIdle" value="8"/> 
+		<property name="timeBetweenEvictionRunsMillis" value="1800"/> 
+		<property name="minEvictableIdleTimeMillis" value="1800"/> 
+		<property name="testOnBorrow" value="true"/>
+		<property name="testWhileIdle" value="true"/> 
+		<property name="testOnReturn" value="true"/> 
+		<property name="validationQuery" value="SELECT 1"/> 
+		<property name="maxWait" value="1000"/> 
+		<property name="removeAbandoned" value="true"/> 
+		<property name="logAbandoned" value="true"/> 
+		<property name="removeAbandonedTimeout" value="15000"/ -->
+	</bean>
+	
+	<camelContext xmlns="http://camel.apache.org/schema/spring">
+  <onException>
+    <exception>java.lang.Exception</exception>
+    <redeliveryPolicy maximumRedeliveries="3" redeliveryDelay="6000" retryAttemptedLogLevel="WARN"/>
+    <handled>
+      <constant>true</constant>
+    </handled>
+    <to uri="activemq:jdbcwriter"/>
+  </onException>
+  <route>
+    <from uri="activemq:jdbcwriter"/>
+    <to uri="jdbc:dataSource"/>
+  </route>
+</camelContext>
+</beans>
